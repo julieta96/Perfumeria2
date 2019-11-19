@@ -5,9 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import puntos.Cliente;
+import puntos.CompraNoEncontradaException;
 import puntos.Perfumeria;
+import puntos.Producto;
+import puntos.ProductoNoEncontradoException;
 import puntos.Usuario;
 import puntos.UsuarioIncorrectoException;
+import puntos.Venta;
 
 public class TestPerfumeria {
 
@@ -120,20 +124,160 @@ public class TestPerfumeria {
 	 }
 	
 	
-//	 @Test
-//	 public void testQueClienteRealizeCompra() {
-//	
-//	 Perfumeria unlam = new Perfumeria("UNLAM");
-//	 Cliente cliente = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
-//	 Producto p1 = new Producto(500.0 , 15 , "DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
-//	 unlam.agregarUsuario(cliente);
-//	 p1.productoDisponible();
-//	 unlam.agregarProducto(p1);
-//	 unlam.loguearUsuario("margz@gmail.com", "abc10");
-//	 Venta v1 = new Venta (cliente , p1);
-//	
-//	 assertFalse(cliente.comprar(cliente, p1));
-//	
-//	 }
+	 @Test
+	 public void testQueClienteRealizeCompra() throws UsuarioIncorrectoException, ProductoNoEncontradoException {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Cliente cliente = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+	 Producto p1 = new Producto(500.0 , 15 , "DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
+	 unlam.agregarUsuario(cliente);
+	 p1.productoDisponible();
+	 unlam.agregarProducto(p1);
+	 unlam.loguearUsuario("margz@gmail.com", "abc10");
+	 Venta v1 = new Venta (unlam.buscarClientePorEmail("margz@gmail.com") , p1);
+	 unlam.agregarVenta(v1);
+	
+	 assertTrue(unlam.venderConEfectivo(unlam.buscarClientePorEmail("margz@gmail.com"), p1.getId()));
+	
+	 }
+	 
+	 @Test
+	 public void testQueBusqueProductoPorId() throws ProductoNoEncontradoException  {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Producto p1 = new Producto(500.0 , 15 , "DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
+	 p1.productoDisponible();
+	 unlam.agregarProducto(p1);
+	 
+	 assertEquals(p1 , unlam.buscarProductoPorId(p1.getId()));
+	
+	 }
+	 
+	 @Test
+	 public void testQueBusqueClientePorEmail() throws UsuarioIncorrectoException   {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Usuario cl1 = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+	 unlam.agregarUsuario((Cliente)cl1);
+	 assertEquals(cl1 , unlam.buscarClientePorEmail("margz@gmail.com"));
+	
+	 }
+	 
+	 @Test
+	 public void testQueElClienteCierreSesion() {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Usuario cl1 = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+	 unlam.agregarUsuario((Cliente)cl1);
+	 
+	 unlam.cerrarSesion();
+	 assertTrue(unlam.getSesionAbierta());
+	 
+	 
+	 }
+	 
+	 @Test(expected = UsuarioIncorrectoException.class)
+	 public void testQueNoSePuedaEliminarUsuario() throws UsuarioIncorrectoException   {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Usuario cl1 = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+	 unlam.agregarUsuario((Cliente)cl1);
+	 unlam.eliminarUsuario(123);
+	 
+	 
+	 }
+	 
+	 @Test(expected = UsuarioIncorrectoException.class)
+	 public void testQueNoPuedaEncontrarUsuario() throws UsuarioIncorrectoException   {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Usuario cl1 = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+	 unlam.agregarUsuario((Cliente)cl1);
+	 unlam.buscarClientePorEmail("mgz@gmail.com");
+	 
+	 }
+
+	 @Test(expected = ProductoNoEncontradoException .class)
+	 public void testQueNoPuedaEncontrarProducto() throws ProductoNoEncontradoException  {
+	
+	 Perfumeria unlam = new Perfumeria("UNLAM");
+	 Producto p1 = new Producto(48.0 , 9 ,"DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
+	 p1.productoDisponible();
+	 unlam.agregarProducto(p1);
+	 unlam.buscarProductoPorId(45);
+	 
+	 }
+	 
+	 @Test(expected = CompraNoEncontradaException .class)
+	 public void testQueNoSePuedaAnularCompra() throws CompraNoEncontradaException, UsuarioIncorrectoException, ProductoNoEncontradoException  {
+	
+		 Perfumeria unlam = new Perfumeria("UNLAM");
+		 Cliente cliente = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+		 Producto p1 = new Producto(500.0 , 15 , "DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
+		 unlam.agregarUsuario(cliente);
+		 p1.productoDisponible();
+		 unlam.agregarProducto(p1);
+		 unlam.loguearUsuario("margz@gmail.com", "abc10");
+		 Venta v1 = new Venta (unlam.buscarClientePorEmail("margz@gmail.com") , p1);
+		 unlam.agregarVenta(v1);
+		
+		 unlam.venderConEfectivo(unlam.buscarClientePorEmail("margz@gmail.com"), p1.getId());
+		 
+		 unlam.anularCompra(456);
+		
+	 }
+	 
+	 @Test
+	 public void testQueSePuedaAnularCompra() throws CompraNoEncontradaException, UsuarioIncorrectoException, ProductoNoEncontradoException  {
+	
+		 Perfumeria unlam = new Perfumeria("UNLAM");
+		 Cliente cliente = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+		 Producto p1 = new Producto(500.0 , 15 , "DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
+		 unlam.agregarUsuario(cliente);
+		 p1.productoDisponible();
+		 unlam.agregarProducto(p1);
+		 unlam.loguearUsuario("margz@gmail.com", "abc10");
+		 Venta v1 = new Venta (unlam.buscarClientePorEmail("margz@gmail.com") , p1);
+		 unlam.agregarVenta(v1);
+		
+		 unlam.venderConEfectivo(unlam.buscarClientePorEmail("margz@gmail.com"), p1.getId());
+		 
+		 assertTrue(unlam.anularCompra(v1.getIdVenta()));
+		
+	 }
+	 
+	 @Test(expected = UsuarioIncorrectoException.class)
+	 public void testQueNoSePuedaCompra() throws UsuarioIncorrectoException, ProductoNoEncontradoException  {
+	
+		 Perfumeria unlam = new Perfumeria("UNLAM");
+		 Cliente cliente = new Cliente("Marta", "Guzman", "margz@gmail.com", "abc10");
+		 Producto p1 = new Producto(500.0 , 15 , "DISNEY PRINCESA PERFUME MANZANA BLANCANIEVES");
+		 unlam.agregarUsuario(cliente);
+		 p1.productoDisponible();
+		 unlam.agregarProducto(p1);
+		 unlam.loguearUsuario("margz@gmail.com", "abc10");
+		 Venta v1 = new Venta (unlam.buscarClientePorEmail("margz@gmail.com") , p1);
+		 unlam.agregarVenta(v1);
+		
+		assertFalse(unlam.venderConEfectivo(unlam.buscarClientePorEmail("m@gmail.com"),65));
+		 
+		
+		
+	 }
+	 
+		@Test 
+		 public void testQueObtengaPuntosDeUnUsuario(){
+			 Perfumeria unlam = new Perfumeria("UNLAM");
+			 Cliente cliente = new Cliente("Maria", "Gutierrez", "mariaguti@hotmail.com", "opqr789");
+			 unlam.agregarUsuario(cliente);
+			 Integer puntos=0;
+			 puntos=unlam.obtenerPuntosDeUnCliente(cliente);
+			 assertTrue(puntos!=-1);
+		 }
+	 
+	 
+	 
+	 
+	 
 
 }

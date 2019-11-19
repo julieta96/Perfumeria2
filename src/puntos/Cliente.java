@@ -10,6 +10,10 @@ public class Cliente extends Usuario implements Comparable <Cliente>{
 		this.puntos = 0;
 
 	}
+	
+	public Cliente () {
+		
+	}
 
 	public Integer getPuntos() {
 		return puntos;

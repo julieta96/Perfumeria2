@@ -58,6 +58,14 @@ public class Perfumeria implements Vende {
 	public void setListaProducto(LinkedList<Producto> listaProducto) {
 		this.listaProducto = listaProducto;
 	}
+	
+	public Boolean getSesionAbierta() {
+		return sesionAbierta;
+	}
+
+	public void setSesionAbierta(Boolean sesionAbierta) {
+		this.sesionAbierta = sesionAbierta;
+	}
 
 	public Boolean agregarUsuario(Cliente usuario) {
 
@@ -100,9 +108,9 @@ public class Perfumeria implements Vende {
 
 	public void cerrarSesion() {
 
-		if (this.sesionAbierta = true) {
-			this.sesionAbierta = false;
-		}
+		
+	this.sesionAbierta = !this.sesionAbierta;
+		
 	}
 
 	public Boolean eliminarUsuario(Integer idU) throws UsuarioIncorrectoException {
@@ -127,42 +135,69 @@ public class Perfumeria implements Vende {
 
 	}
 
-	
+	public Cliente buscarClientePorEmail(String email) throws UsuarioIncorrectoException {
+		
+		Cliente c = new Cliente();
 
-	public Producto buscarProductoPorId(Integer idProducto) throws ProductoNoEncontradoException {
+		for (Cliente buscarCliente : listaUsuarios) {
+			if (buscarCliente.getEmail().equals(email)) {
 
-		Producto productoEncontrado = null;
+				return buscarCliente;
 
-		for (Producto buscarProducto : listaProducto) {
-			if (buscarProducto.getId().equals(idProducto)) {
-
-				productoEncontrado = buscarProducto;
-			} else {
-				throw new ProductoNoEncontradoException();
+			}else {
+				throw new UsuarioIncorrectoException();
 			}
 
 		}
 
-		return productoEncontrado;
+		//throw new UsuarioIncorrectoException();
+		return c;
 
+	}
+
+	public Producto buscarProductoPorId(Integer idProducto) throws ProductoNoEncontradoException {
+
+		Producto productoBuscado = null;
+		Iterator <Producto> iterator = this.listaProducto.iterator();
+		
+		while(productoBuscado==null && iterator.hasNext()) {
+			Producto producto = iterator.next();
+			if(producto.getId().equals(idProducto)) {
+				productoBuscado=producto;
+			}
+		}
+		
+		if(productoBuscado==null) {
+			throw new ProductoNoEncontradoException();
+		}
+		return productoBuscado;
+		
+		//throw new ProductoNoEncontradoException();
 	}
 
 	public Boolean anularCompra(Integer id) throws CompraNoEncontradaException {
 
 		Boolean compraAnulada = false;
+		Venta buscarVenta=null;
 
 		Iterator<Venta> it = listaVentas.iterator();
 
-		while (it.hasNext()) {
+		while (buscarVenta == null && it.hasNext()) {
 
 			Venta v = it.next();
 			if (v.getIdVenta().equals(id)) {
 				it.remove();
-				compraAnulada = true;
-			} else {
-				throw new CompraNoEncontradaException();
-			}
+				compraAnulada=true; 
+				buscarVenta = v;
+			    
+			} 
 
+
+		}
+		
+		if(buscarVenta == null) {
+			compraAnulada = false;
+			throw new CompraNoEncontradaException();
 		}
 
 		return compraAnulada;
@@ -170,40 +205,64 @@ public class Perfumeria implements Vende {
 	}
 
 	@Override
-	public Boolean venderConPuntos(String e , Integer idP) {
+	public Boolean venderConPuntos(Cliente c, Integer idP , Integer puntos) throws ProductoNoEncontradoException {
 
-		Boolean ventaExitosa = false;
-
-		for (Venta ventasAux : this.listaVentas) {
-			if (ventasAux.getCliente().getEmail().equals(e) && ventasAux.getProducto().getId().equals(idP)) {
-				if (ventasAux.getProducto().getEstado() == true) {
-
-					ventaExitosa = true;
-
-				}
-
+		Boolean ventaExitosa=false;
+		Integer totalPuntos=0;
+		Venta buscarVenta = null;
+		Iterator <Venta> iterator = this.listaVentas.iterator();
+		while(buscarVenta == null && iterator.hasNext()) {
+			
+			Venta venta  = iterator.next();
+			if(venta.getCliente().equals(c) && venta.getProducto().getId().equals(idP)) {
+				ventaExitosa=true;
+				totalPuntos=Math.abs(((Cliente) venta.getCliente()).getPuntos());
+				totalPuntos-=puntos;
+				buscarVenta = venta;
 			}
+		}
+		
+		if(buscarVenta==null) {
+			ventaExitosa=false;
+			throw new ProductoNoEncontradoException();
 		}
 		return ventaExitosa;
 	}
 
-	
-
 	@Override
-	public Boolean venderConEfectivo(String e , Integer idP) {
-		Boolean ventaExitosa = false;
-
-		for (Venta ventasAux : this.listaVentas) {
-			if (ventasAux.getCliente().getEmail().equals(e) && ventasAux.getProducto().getId().equals(idP)) {
-				if (ventasAux.getProducto().getEstado() == true) {
-
-					ventaExitosa = true;
-
-				}
-
+	public Boolean venderConEfectivo(Cliente c, Integer idP) throws ProductoNoEncontradoException {
+		
+		Boolean ventaExitosa=false;
+		
+		Venta buscarVenta = null;
+		Iterator <Venta> iterator = this.listaVentas.iterator();
+		while(buscarVenta == null && iterator.hasNext()) {
+			
+			Venta venta  = iterator.next();
+			if(venta.getCliente().equals(c) && venta.getProducto().getId().equals(idP)) {
+				ventaExitosa=true;
+				buscarVenta = venta;
 			}
 		}
+		
+		if(buscarVenta==null) {
+			ventaExitosa=false;
+			throw new ProductoNoEncontradoException();
+		}
 		return ventaExitosa;
+	}
+	
+	public Integer obtenerPuntosDeUnCliente(Cliente c) {
+		Integer puntos = -1;
+
+		Iterator<Cliente> iterator = this.listaUsuarios.iterator();
+		while (iterator.hasNext()) {
+			Cliente cliente = iterator.next();
+			if (cliente.equals(c)) {
+				puntos = cliente.getPuntos();
+			}
+		}
+		return puntos;
 	}
 
 }

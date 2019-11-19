@@ -16,6 +16,10 @@ public abstract class Usuario {
 		this.id=(int)(Math.random()*200)+1;
 
 	}
+	
+	public Usuario() {
+		
+	}
 
 	public String getNombre() {
 		return nombre;
