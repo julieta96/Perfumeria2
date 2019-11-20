@@ -16,6 +16,10 @@ public class Producto {
 		this.descripcion=descripcion;
 		this.estado=false;
 	}
+	
+	public Producto () {
+		
+	}
 
 	public Double getPrecio() {
 		return precio;

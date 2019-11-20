@@ -3,17 +3,35 @@ package puntos;
 public class Cliente extends Usuario implements Comparable <Cliente>{
 
 	private Integer puntos;
+	private Integer id;
 
 	public Cliente(String nombre, String apellido, String email, String password) {
 		super(nombre, apellido, email, password);
 
 		this.puntos = 0;
+		this.id=(int)(Math.random()*200)+1;
 
 	}
 	
+	public Cliente(String nombre, String apellido, String email, String password , Integer id) {
+		super(nombre, apellido, email, password);
+
+		this.puntos = 0;
+		this.id=id;
+
+	}
 	public Cliente () {
 		
 	}
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	
 
 	public Integer getPuntos() {
 		return puntos;

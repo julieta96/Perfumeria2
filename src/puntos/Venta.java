@@ -21,7 +21,9 @@ public class Venta {
 		
 	}
 	
-	
+	public Venta () {
+		
+	}
 
 	public Venta(String nombre, String apellido, String email, String password,  Double precio,
 			Integer punto, String descripcion) {

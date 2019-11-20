@@ -6,14 +6,14 @@ public abstract class Usuario {
 	private String apellido;
 	private String email;
 	private String password;
-	private Integer id;
+	
 
 	public Usuario(String nombre, String apellido, String email, String password) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
 		this.password = password;
-		this.id=(int)(Math.random()*200)+1;
+		
 
 	}
 	
@@ -53,13 +53,7 @@ public abstract class Usuario {
 		this.password = password;
 	}
 
-	public Integer getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	
 }

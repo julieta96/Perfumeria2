@@ -17,22 +17,18 @@ public class Menu {
 
 		Scanner teclado = new Scanner(System.in);
 
-		Integer opciones = 3;
+	
 		Integer i = 0;
-		Integer menu = 0;
-		Integer cantidadUsuarios = 0;
-		Integer contador = 0;
 		String nombrePerfumeria = "UNLAM";
 		char categorias = ' ';
 		String categoriaElegida = " ";
 		Integer opcionesCategorias = 14;
-		Integer c = 0;
 		Integer pCod = 0;
-		String emailC = " ";
 		String nombre = " ";
 		String apellido = " ";
 		String email = " ";
 		String password = " ";
+		Integer id = 1545;
 		Perfumeria miPerfumeria = new Perfumeria(nombrePerfumeria);
 		
 		System.out.println("\t********MENU********\t"+"\n");
@@ -48,19 +44,19 @@ public class Menu {
 		System.out.println("Ingrese password:");
 		password = teclado.next();
 		System.out.println("\t*******************\t");
-		Cliente cliente = new Cliente(nombre, apellido, email, password);
+		Cliente cliente = new Cliente(nombre, apellido, email, password , id);
 		miPerfumeria.agregarUsuario(cliente);
 		System.out.println("2.Inicie Sesion\n");
 		
-		System.out.println((contador + 1) + ".Email:");
+		System.out.println("Email:");
 		email = teclado.next();
-		System.out.println((contador + 1) + ".Password:");
+		System.out.println("Password:");
 		password = teclado.next();
 		System.out.println("estado de ingreso: " + miPerfumeria.loguearUsuario(email, password));
 		if (miPerfumeria.loguearUsuario(email, password) == true) {
 
 			do {
-				c++;
+				i++;
 				System.out.println("\t Bienvenido a Perfumeria " + nombrePerfumeria + "\t");
 				System.out.println("------------");
 				System.out.println("Elija categoria del producto que desea buscar:");
@@ -70,6 +66,7 @@ public class Menu {
 				System.out.println("------------");
 				System.out.println("3.VER TOTAL DE PUNTOS");
 				System.out.println("4.CERRAR SESION");
+				System.out.println("5.ELIMINAR CUENTA");
 				categorias = teclado.next().charAt(0);
 				switch (categorias) {
 
@@ -120,7 +117,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -165,7 +162,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -249,7 +246,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -294,7 +291,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -377,7 +374,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -422,7 +419,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -513,7 +510,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -558,7 +555,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -643,7 +640,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -688,7 +685,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -773,7 +770,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -818,7 +815,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -910,7 +907,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -955,7 +952,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -1039,7 +1036,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -1084,7 +1081,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -1168,7 +1165,7 @@ public class Menu {
 								+ "(si desea comprar con puntos , 1ero debe realizar 1 compra , si aun no a comprado no podra realizar este tipo de pago.)");
 						char opcionDeCompra = teclado.next().charAt(0);
 						if (opcionDeCompra == 'f') {
-						if (miPerfumeria.venderConEfectivo(miPerfumeria.buscarClientePorEmail(email),
+						if (miPerfumeria.venderConEfectivo(cliente,
 								pCod) == true) {
 
 							System.out.println("Compra exitosa");
@@ -1213,7 +1210,7 @@ public class Menu {
 								
 							
 ;							
-							if (miPerfumeria.venderConPuntos(miPerfumeria.buscarClientePorEmail(email),
+							if (miPerfumeria.venderConPuntos(cliente,
 									pCod , puntosACangear) == true) {
 
 								System.out.println("Compra exitosa");
@@ -1268,14 +1265,24 @@ public class Menu {
 						System.out.println("SESION CERRADA");
 					}
 					break;
+					
+				case '5':
+					if(miPerfumeria.eliminarUsuario(id)==true) {
+						miPerfumeria.cerrarSesion();
+						if(miPerfumeria.getSesionAbierta() ==false) {
+							System.out.println("CUENTA ELIMINADA");
+						}
+						
+					}
+					break;
 				default:
 					System.err.println("error , categoria inexistente");
 
 				}
 
-			} while (c < opcionesCategorias && miPerfumeria.getSesionAbierta() ==true);
+			} while ((i< opcionesCategorias) && (miPerfumeria.getSesionAbierta()==true));
 			
-			System.out.println();
+			
 
 		}
 

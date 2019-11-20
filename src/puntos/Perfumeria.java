@@ -58,7 +58,7 @@ public class Perfumeria implements Vende {
 	public void setListaProducto(LinkedList<Producto> listaProducto) {
 		this.listaProducto = listaProducto;
 	}
-	
+
 	public Boolean getSesionAbierta() {
 		return sesionAbierta;
 	}
@@ -108,77 +108,73 @@ public class Perfumeria implements Vende {
 
 	public void cerrarSesion() {
 
-		
-	this.sesionAbierta = !this.sesionAbierta;
-		
+		this.sesionAbierta = !this.sesionAbierta;
+
 	}
 
-	public Boolean eliminarUsuario(Integer idU) throws UsuarioIncorrectoException {
+	public Boolean eliminarUsuario(Integer id) throws UsuarioIncorrectoException {
 
 		Boolean eliminado = false;
+		Cliente clienteBuscado = null;
 
-		Iterator<Cliente> it = listaUsuarios.iterator();
+		Iterator<Cliente> it = this.listaUsuarios.iterator();
 
-		while (it.hasNext()) {
+		while (clienteBuscado == null && it.hasNext()) {
 
-			Cliente u = it.next();
-			if (u.getId().equals(idU)) {
+			Cliente c = it.next();
+			if (c.getId().equals(id)) {
 				it.remove();
 				eliminado = true;
-			} else {
-				throw new UsuarioIncorrectoException();
+				clienteBuscado= c;
+
 			}
 
+		}
+
+		if (clienteBuscado == null) {
+			eliminado= false;
+			throw new UsuarioIncorrectoException();
 		}
 
 		return eliminado;
 
-	}
-
-	public Cliente buscarClientePorEmail(String email) throws UsuarioIncorrectoException {
-		
-		Cliente c = new Cliente();
-
-		for (Cliente buscarCliente : listaUsuarios) {
-			if (buscarCliente.getEmail().equals(email)) {
-
-				return buscarCliente;
-
-			}else {
-				throw new UsuarioIncorrectoException();
-			}
-
-		}
-
-		//throw new UsuarioIncorrectoException();
-		return c;
 
 	}
 
 	public Producto buscarProductoPorId(Integer idProducto) throws ProductoNoEncontradoException {
 
 		Producto productoBuscado = null;
-		Iterator <Producto> iterator = this.listaProducto.iterator();
-		
-		while(productoBuscado==null && iterator.hasNext()) {
+		// Producto productoNoEncontrado = new Producto();
+
+		// Producto productoBuscado = new Producto();
+		Iterator<Producto> iterator = this.listaProducto.iterator();
+
+		while (productoBuscado == null && iterator.hasNext()) {
 			Producto producto = iterator.next();
-			if(producto.getId().equals(idProducto)) {
-				productoBuscado=producto;
+			if (producto.getId().equals(idProducto)) {
+				productoBuscado = producto;
 			}
 		}
-		
-		if(productoBuscado==null) {
+
+		// while (/*productoBuscado == null && */iterator.hasNext()) {
+		// Producto producto = iterator.next();
+		// if (producto.getId()!=idProducto) {
+		// productoBuscado=null;
+		// }
+		// }
+
+		if (productoBuscado == null) {
 			throw new ProductoNoEncontradoException();
 		}
 		return productoBuscado;
-		
-		//throw new ProductoNoEncontradoException();
+
+		// throw new ProductoNoEncontradoException();
 	}
 
 	public Boolean anularCompra(Integer id) throws CompraNoEncontradaException {
 
 		Boolean compraAnulada = false;
-		Venta buscarVenta=null;
+		Venta buscarVenta = null;
 
 		Iterator<Venta> it = listaVentas.iterator();
 
@@ -187,15 +183,14 @@ public class Perfumeria implements Vende {
 			Venta v = it.next();
 			if (v.getIdVenta().equals(id)) {
 				it.remove();
-				compraAnulada=true; 
+				compraAnulada = true;
 				buscarVenta = v;
-			    
-			} 
 
+			}
 
 		}
-		
-		if(buscarVenta == null) {
+
+		if (buscarVenta == null) {
 			compraAnulada = false;
 			throw new CompraNoEncontradaException();
 		}
@@ -205,53 +200,64 @@ public class Perfumeria implements Vende {
 	}
 
 	@Override
-	public Boolean venderConPuntos(Cliente c, Integer idP , Integer puntos) throws ProductoNoEncontradoException {
+	public Boolean venderConPuntos(Cliente c, Integer idP, Integer puntos) throws ProductoNoEncontradoException {
 
-		Boolean ventaExitosa=false;
-		Integer totalPuntos=0;
-		Venta buscarVenta = null;
-		Iterator <Venta> iterator = this.listaVentas.iterator();
-		while(buscarVenta == null && iterator.hasNext()) {
-			
-			Venta venta  = iterator.next();
-			if(venta.getCliente().equals(c) && venta.getProducto().getId().equals(idP)) {
-				ventaExitosa=true;
-				totalPuntos=Math.abs(((Cliente) venta.getCliente()).getPuntos());
-				totalPuntos-=puntos;
+		Boolean ventaExitosa = false;
+		Integer totalPuntos = 0;
+		Venta buscarVenta = new Venta();
+		Iterator<Venta> iterator = this.listaVentas.iterator();
+		while (/* buscarVenta == null && */iterator.hasNext()) {
+
+			Venta venta = iterator.next();
+			if (venta.getCliente().equals(c) && venta.getProducto().getId().equals(idP)) {
+				ventaExitosa = true;
+				totalPuntos = Math.abs(((Cliente) venta.getCliente()).getPuntos());
+				totalPuntos -= puntos;
 				buscarVenta = venta;
 			}
 		}
-		
-		if(buscarVenta==null) {
-			ventaExitosa=false;
-			throw new ProductoNoEncontradoException();
+
+		while (/* buscarVenta == null && */iterator.hasNext()) {
+
+			Venta venta = iterator.next();
+			if (venta.getCliente() != c && venta.getProducto().getId() != idP) {
+				ventaExitosa = false;
+				throw new ProductoNoEncontradoException();
+			}
 		}
+
+		/*
+		 * if(buscarVenta==null) { ventaExitosa=false; throw new
+		 * ProductoNoEncontradoException(); }
+		 */
 		return ventaExitosa;
 	}
 
 	@Override
 	public Boolean venderConEfectivo(Cliente c, Integer idP) throws ProductoNoEncontradoException {
-		
-		Boolean ventaExitosa=false;
-		
+
+		Boolean ventaExitosa = false;
+
 		Venta buscarVenta = null;
-		Iterator <Venta> iterator = this.listaVentas.iterator();
-		while(buscarVenta == null && iterator.hasNext()) {
-			
-			Venta venta  = iterator.next();
-			if(venta.getCliente().equals(c) && venta.getProducto().getId().equals(idP)) {
-				ventaExitosa=true;
+		Iterator<Venta> iterator = this.listaVentas.iterator();
+		while (buscarVenta == null && iterator.hasNext()) {
+
+			Venta venta = iterator.next();
+			if (venta.getCliente().equals(c) && venta.getProducto().getId().equals(idP)) {
+				ventaExitosa = true;
 				buscarVenta = venta;
 			}
 		}
-		
-		if(buscarVenta==null) {
-			ventaExitosa=false;
+
+		if (buscarVenta == null) {
+			ventaExitosa = false;
 			throw new ProductoNoEncontradoException();
+
 		}
+
 		return ventaExitosa;
 	}
-	
+
 	public Integer obtenerPuntosDeUnCliente(Cliente c) {
 		Integer puntos = -1;
 
