@@ -1,7 +1,6 @@
 package menu;
 
 import java.util.Scanner;
-
 import puntos.Cliente;
 import puntos.CompraNoEncontradaException;
 import puntos.Perfumeria;
