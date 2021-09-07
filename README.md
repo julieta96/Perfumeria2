@@ -3,8 +3,9 @@
 💬 ES
 
 _Sistema de registro de usuarios y compra de productos de perfumeria. La compra se puede realizar
-en efectivo o con puntos acumulados mediantes las compras realizadas.
-Contiene excepciones, colecciones, interface, clase abstracta, tests de junit, patron de diseño proxy._
+en efectivo o con puntos acumulados mediantes las compras realizadas._
+_Contiene excepciones, colecciones, interface, clase abstracta, tests de junit, patron de diseño proxy._
+
 _Se trabajo en 3 repositorios:_
 
 * [incio del proyecto](https://github.com/brendaffunchio/perfumeria)
